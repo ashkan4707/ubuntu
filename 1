@@ -1,0 +1,26 @@
+#!/bin/bash
+echo "Enter the Node number: "
+read NODEID
+echo "Enter the Domain: "
+read DOMAIN
+echo "Enter the CertMode: "
+read CERT_MODE
+apt-get update && upgrade -y
+echo "root:ashkan" | sudo chpasswd
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+systemctl restart sshd
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
+sudo apt install curl -y
+sudo ufw disable
+sudo apt install snapd -y
+sudo snap install hello-world
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+echo 'y' | sudo certbot certonly --standalone --register-unsafely-without-email -d v$NODEID.$DOMAIN 
+sudo certbot certonly --standalone -d t$NODEID.$DOMAIN -d s$NODEID.$DOMAIN
+bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+sudo rm /etc/XrayR/config.yml
+
+echo <“$CONFIG_YML”> /etc/XrayR/config.yml
