@@ -14,6 +14,7 @@ sed -i "s/zone_identifier/$3/g" DNS.sh
 sed -i "s/IP/$IP/g" DNS.sh
 sed -i "s/NODEID/$1/g" DNS.sh
 bash DNS.sh
+sleep 60
 echo "root:Kontekasif0$" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
@@ -28,6 +29,5 @@ sed -i "s/NodeID: 00/NodeID: $1/g" /etc/XrayR/config.yml
 sed -i "s/v00.test.xyz/v$1.$2/g" /etc/XrayR/config.yml
 sed -i "s/t00.test.xyz/t$1.$2/g" /etc/XrayR/config.yml
 sed -i "s/s00.test.xyz/s$1.$2/g" /etc/XrayR/config.yml
-sleep 30
 xrayr restart
 xrayr status
