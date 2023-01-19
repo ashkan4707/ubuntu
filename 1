@@ -6,7 +6,7 @@ read DOMAIN
 #echo "Enter the CertMode: "
 #read CERT_MODE
 apt-get update && upgrade -y
-echo "root:ashkan" | sudo chpasswd
+echo "root:Kontekasif0$" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 systemctl restart sshd
