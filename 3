@@ -28,5 +28,6 @@ sed -i "s/NodeID: 00/NodeID: $1/g" /etc/XrayR/config.yml
 sed -i "s/v00.test.xyz/v$1.$2/g" /etc/XrayR/config.yml
 sed -i "s/t00.test.xyz/t$1.$2/g" /etc/XrayR/config.yml
 sed -i "s/s00.test.xyz/s$1.$2/g" /etc/XrayR/config.yml
+sleep 30
 xrayr restart
 xrayr status
