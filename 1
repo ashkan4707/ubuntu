@@ -29,5 +29,5 @@ sed -i "s/t00.test.xyz/t$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 sed -i "s/s00.test.xyz/s$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 #sed -i "s/CertMode: none/CertMode: $CERT_MODE/g" /etc/XrayR/config.yml
 xrayr restart
-sleep 30
+sleep 5
 xrayr status
