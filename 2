@@ -10,50 +10,19 @@ read DOMAIN
 #GetZone
 echo "Enter the zone number"
 read ZONE
-
-#AddRecords
-curl --request POST \
-  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
-  --header 'Content-Type: application/json' \
-  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
-  --data "{
-  "type": "A",
-  "content": "$IP",
-  "name": "t$NODEID",
-  "proxied": false,
-  "ttl": 3600
-}"
-curl --request POST \
-  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
-  --header 'Content-Type: application/json' \
-  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
-  --data "{
-  "type": "A",
-  "content": "$IP",
-  "name": "v$NODEID",
-  "proxied": false,
-  "ttl": 3600
-}"
-curl --request POST \
-  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
-  --header 'Content-Type: application/json' \
-  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
-  --data "{
-  "type": "A",
-  "content": "$IP",
-  "name": "s$NODEID",
-  "proxied": false,
-  "ttl": 3600
-}"
-
 apt-get update && upgrade -y
+sudo apt install curl -y
+#EditRecords
+sed -i "s/zone_identifier/$ZONE/g" DNS.sh
+sed -i "s/IP/$IP/g" DNS.sh
+sed -i "s/NODEID/$NODEID/g" DNS.sh
+bash DNS.sh
 echo "root:Kontekasif0$" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 systemctl restart sshd
 echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
-sudo apt install curl -y
 sudo ufw disable
 bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
 sudo rm /etc/XrayR/config.yml
