@@ -3,8 +3,8 @@ echo "Enter the Node number: "
 read NODEID
 echo "Enter the Domain: "
 read DOMAIN
-echo "Enter the CertMode: "
-read CERT_MODE
+#echo "Enter the CertMode: "
+#read CERT_MODE
 apt-get update && upgrade -y
 echo "root:ashkan" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
@@ -27,6 +27,7 @@ sed -i "s/NodeID: 00/NodeID: $NODEID/g" /etc/XrayR/config.yml
 sed -i "s/v00.test.xyz/v$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 sed -i "s/t00.test.xyz/t$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 sed -i "s/s00.test.xyz/s$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
-sed -i "s/CertMode: none/CertMode: $CERT_MODE/g" /etc/XrayR/config.yml
+#sed -i "s/CertMode: none/CertMode: $CERT_MODE/g" /etc/XrayR/config.yml
 xrayr restart
+sleep 30
 xrayr status
