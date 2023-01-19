@@ -1,0 +1,67 @@
+#!/bin/bash
+#GetIPaddress
+curl -s ifconfig.me
+read IP
+#GetNodeNumber
+echo "Enter the Node number: "
+read NODEID
+#GetDomain
+echo "Enter the Domain: "
+read DOMAIN
+#GetZone
+echo "Enter the zone number"
+read ZONE
+
+#AddRecords
+curl --request POST \
+  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
+  --data '{
+  "type": "A",
+  "content": "$IP",
+  "name": "t$NODEID",
+  "proxied": false,
+  "ttl": 3600
+}'
+curl --request POST \
+  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
+  --data '{
+  "type": "A",
+  "content": "$IP",
+  "name": "v$NODEID",
+  "proxied": false,
+  "ttl": 3600
+}'
+curl --request POST \
+  --url https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records \
+  --header 'Content-Type: application/json' \
+  --header 'X-Auth-Key: e37d986b5aeb10c07af376fd83aa90cf165c8' --header 'X-Auth-Email: hesam.imam@gmail.com' \
+  --data '{
+  "type": "A",
+  "content": "$IP",
+  "name": "s$NODEID",
+  "proxied": false,
+  "ttl": 3600
+}'
+
+apt-get update && upgrade -y
+echo "root:Kontekasif0$" | sudo chpasswd
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+systemctl restart sshd
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
+sudo apt install curl -y
+sudo ufw disable
+bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+sudo rm /etc/XrayR/config.yml
+mv config.yml /etc/XrayR/
+sed -i "s/NodeID: 00/NodeID: $NODEID/g" /etc/XrayR/config.yml
+sed -i "s/v00.test.xyz/v$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
+sed -i "s/t00.test.xyz/t$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
+sed -i "s/s00.test.xyz/s$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
+xrayr restart
+xrayr status
