@@ -1,7 +1,6 @@
 #!/bin/bash
 #GetIPaddress
-curl -s ifconfig.me
-read IP
+IP=$(curl -s ifconfig.me)
 #GetNodeNumber
 echo "Enter the Node number: "
 read NODEID
