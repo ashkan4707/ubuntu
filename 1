@@ -22,11 +22,11 @@ echo 'y' | sudo certbot certonly --standalone --register-unsafely-without-email 
 sudo certbot certonly --standalone -d t$NODEID.$DOMAIN -d s$NODEID.$DOMAIN
 bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
 sudo rm /etc/XrayR/config.yml
-mv /ubuntu/config.yml /etc/XrayR/
+mv config.yml /etc/XrayR/
 sed -i 's/NodeID: 00/NodeID: $NODEID/g' /etc/XrayR/config.yml
 sed -i 's/v00.test.xyz/v$NODEID.$DOMAIN/g' /etc/XrayR/config.yml
-sed -i 's/t00.test.xyz/t$NODEID.$DOMAIN/config.yml
-sed -i 's/s00.test.xyz/s$NODEID.$DOMAIN/config.yml
+sed -i 's/t00.test.xyz/t$NODEID.$DOMAIN/g' /etc/XrayR/config.yml
+sed -i 's/s00.test.xyz/s$NODEID.$DOMAIN/g' /etc/XrayR/config.yml
 sed -i 's/CertMode: none/CertMode: $CERT_MODE/g' /etc/XrayR/config.yml
 xrayr restart
 xrayr status
