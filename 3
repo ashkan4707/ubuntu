@@ -14,7 +14,6 @@ sed -i "s/zone_identifier/$3/g" DNS.sh
 sed -i "s/IP/$IP/g" DNS.sh
 sed -i "s/NODEID/$1/g" DNS.sh
 bash DNS.sh
-sleep 60
 echo "root:Kontekasif0$" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
