@@ -7,6 +7,9 @@ read NODEID
 #GetDomain
 echo "Enter the Domain: "
 read DOMAIN
+#get cert mode
+echo "Enter the CertMode: "
+read CERT_MODE
 #GetZone
 echo "Enter the zone number"
 read ZONE
@@ -17,6 +20,7 @@ sed -i "s/zone_identifier/$ZONE/g" DNS.sh
 sed -i "s/IP/$IP/g" DNS.sh
 sed -i "s/NODEID/$NODEID/g" DNS.sh
 bash DNS.sh
+sleep 50
 echo "root:Kontekasif0$" | sudo chpasswd
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
@@ -24,6 +28,12 @@ systemctl restart sshd
 echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo ufw disable
+sudo apt install snapd -y
+sudo snap install hello-world
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+echo 'y' | sudo certbot certonly --standalone --register-unsafely-without-email -d v$NODEID.$DOMAIN 
+sudo certbot certonly --standalone -d t$NODEID.$DOMAIN -d s$NODEID.$DOMAIN
 bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
 sudo rm /etc/XrayR/config.yml
 mv config.yml /etc/XrayR/
@@ -31,5 +41,6 @@ sed -i "s/NodeID: 00/NodeID: $NODEID/g" /etc/XrayR/config.yml
 sed -i "s/v00.test.xyz/v$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 sed -i "s/t00.test.xyz/t$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
 sed -i "s/s00.test.xyz/s$NODEID.$DOMAIN/g" /etc/XrayR/config.yml
+sed -i "s/CertMode: dns/CertMode: $CERT_MODE/g" /etc/XrayR/config.yml
 xrayr restart
 xrayr status
