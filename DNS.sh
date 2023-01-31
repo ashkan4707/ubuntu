@@ -8,7 +8,7 @@ curl --request POST \
   "content": "IP",
   "name": "tNODEID",
   "proxied": false,
-  "ttl": 3600
+  "ttl": 1
 }'
 curl --request POST \
   --url https://api.cloudflare.com/client/v4/zones/zone_identifier/dns_records \
@@ -19,7 +19,7 @@ curl --request POST \
   "content": "IP",
   "name": "vNODEID",
   "proxied": false,
-  "ttl": 3600
+  "ttl": 1
 }'
 curl --request POST \
   --url https://api.cloudflare.com/client/v4/zones/zone_identifier/dns_records \
@@ -30,5 +30,5 @@ curl --request POST \
   "content": "IP",
   "name": "sNODEID",
   "proxied": false,
-  "ttl": 3600
+  "ttl": 1
 }'
